@@ -16,9 +16,9 @@ export default function Routes() {
     return(
         <Router>
             <Switch>
-                <Route exact={true} path="/ui/home" children={Home}/>
-                <Route exact={true}  path="/ui/about" children={About}/>
-                <Route exact={true}  path="/ui/task" children={Task}/>
+                <Route exact={true} path="/web/home" children={Home}/>
+                <Route exact={true}  path="/web/about" children={About}/>
+                <Route exact={true}  path="/web/task" children={Task}/>
             </Switch>
         </Router>
     )

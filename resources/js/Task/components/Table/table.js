@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Table({children}){
+export default function Table({tasks, render}){
     return (
         <table className="table table-sm">{
-            children
+            tasks.map((e, k)=> render(e, k))
         }</table>
     )
 }

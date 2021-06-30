@@ -9,9 +9,9 @@ export default function Main(){
     return (
     <main>
         <Switch>
-            <Route path="/ui/home" component={Home}/>
-            <Route path="/ui/about" component={About}/>
-            <Route path="/ui/task" component={Task}/>
+            <Route path="/web/home" component={Home}/>
+            <Route path="/web/about" component={About}/>
+            <Route path="/web/task" component={Task}/>
         </Switch>
     </main>
     )

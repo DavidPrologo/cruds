@@ -4,9 +4,9 @@ import { BrowserRouter, Link } from "react-router-dom";
 export default function Header(){
     return(
         <header>
-            <Link to="/ui/home" >home</Link>
-            <Link to="/ui/about" >about</Link>
-            <Link to="/ui/task" >task</Link>
+            <Link to="/web/home" >home</Link>
+            <Link to="/web/about" >about</Link>
+            <Link to="/web/task" >task</Link>
         </header>
     )
 }

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+// import Modal from './Modal';
 
-export default function ToolBar(){
+export default function ToolBar({ addAction }){
+    // const [show, setShow] = useState(false);
     return (
         <div className="row">
             <div className="col-4">
@@ -8,8 +10,7 @@ export default function ToolBar(){
             </div>
             <div className="col-4"></div>
             <div className="col-4">
-                <button className="btn">adicionar</button>
-                <button className="btn">apagar</button>
+                <button onClick={ addAction } className="btn">adicionar</button>
             </div>
         </div>
     )
