@@ -1,17 +1,17 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route,Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import Home from '../Home';
 import About from '../About';
-import Task from '../Task';
+import TaskPage from '../pages/TaskManegement';
 
 export default function Main(){
     return (
     <main>
-        <Switch>
+        <Switch> 
             <Route path="/web/home" component={Home}/>
             <Route path="/web/about" component={About}/>
-            <Route path="/web/task" component={Task}/>
+            <Route path="/web/task" component={TaskPage}/>
         </Switch>
     </main>
     )

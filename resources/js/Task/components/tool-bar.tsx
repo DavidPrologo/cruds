@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 // import Modal from './Modal';
 
-export default function ToolBar({ addAction }){
-    // const [show, setShow] = useState(false);
+export default function ToolBar(){    // const [show, setShow] = useState(false);
     return (
         <div className="row">
             <div className="col-4">
@@ -10,7 +10,7 @@ export default function ToolBar({ addAction }){
             </div>
             <div className="col-4"></div>
             <div className="col-4">
-                <button onClick={ addAction } className="btn">adicionar</button>
+                <Link to="/web/api" className="btn">adicionar</Link>
             </div>
         </div>
     )

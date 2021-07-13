@@ -12,19 +12,22 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 
 import { BrowserRouter } from 'react-router-dom';
 import Header from './layouts/header';
-import Main from './layouts/main';
+// import Main from './layouts/main';
 import Footer from './layouts/footer';
+import Routes from './routes';
 
-ReactDOM.render(
-    <BrowserRouter>
-        <Header />
-        <Main   />
-        <Footer />
-    </BrowserRouter>,
-    document.getElementById('app')
-) 
-require('./Routes.js');
+export default function App(){
+    return (
+        <BrowserRouter>
+            <Header />
+            <main>
+                <Routes />
+            </main>
+            <Footer />
+        </BrowserRouter>
+    )
+}
