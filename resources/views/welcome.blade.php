@@ -8,10 +8,10 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="{{asset('css/app.css')}}" rel="stylesheet"/>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet"/>
     </head>
     <body class="antialiased">
         <div id="app"></div>
-        <script src="{{asset('js/index.js')}}"></script>    
+        <script src="{{ asset('js/react-compiled/index.js') }}"></script>    
     </body>
 </html>

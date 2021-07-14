@@ -1,10 +1,14 @@
 import React from 'react';
 import {Modal as M, Button} from 'react-bootstrap';
 
-export default function Create()
+interface Props{
+    getStatus: () => boolean;
+}
+
+export default function Create({getStatus}:Props)
 {
     return (
-    <div>
+    <M show={getStatus}>
         <M.Header>
             <M.Title>Cadastrar Tarefa</M.Title>
         </M.Header>
@@ -17,5 +21,5 @@ export default function Create()
             <Button variant="secondery" onClick={()=>{"handleClose"}}>Close</Button>
             <Button variant="primary">Save changes</Button>
         </M.Footer>
-    </div>)
+    </M>)
 }

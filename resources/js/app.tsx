@@ -4,7 +4,7 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-require('./bootstrap');
+// require('./bootstrap');
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -23,11 +23,11 @@ import Routes from './routes';
 export default function App(){
     return (
         <BrowserRouter>
-            <Header />
+            <Header/>
             <main>
-                <Routes />
+                <Routes/>
             </main>
-            <Footer />
+            <Footer />            
         </BrowserRouter>
     )
 }
