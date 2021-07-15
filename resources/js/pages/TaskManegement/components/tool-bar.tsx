@@ -11,7 +11,7 @@ export default function ToolBar({openCreateModal}:Props){    // const [show, set
             </div>
             <div className="col-4"></div>
             <div className="col-4">
-                <Link to="/web/task/create" className="btn" onClick={openCreateModal}>adicionar</Link>
+                <Link to="/web/task#create" className="btn" onClick={openCreateModal}>adicionar</Link>
             </div>
         </div>
     )

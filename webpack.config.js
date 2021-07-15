@@ -1,12 +1,12 @@
 const path = require('path')
 
 const dir_entrada = './resources/js/index.tsx';
-const dir_saida = '../../public/js/react-compiled/';
+const dir_saida = './public/js/react-compiled/';
 module.exports = {
     entry: dir_entrada,
     output: {
         path: path.resolve(__dirname, dir_saida ),
-        filename: 'index.tsx'
+        filename: 'index.js'
     },
     module:{
         rules:[{

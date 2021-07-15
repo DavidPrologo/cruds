@@ -1,68 +1,90 @@
 import React, {useState, useEffect} from 'react';
-import {Route} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+
+import { DataGrid } from '@material-ui/data-grid';
+import {Dialog} from '@material-ui/core';
 
 import api from '../../services/api';
 
 import ToolBar    from './components/tool-bar';
 import Title      from './components/title';
 
-import Create     from './components/Crud/create';
-import Edit       from './components/Crud/edit';
-import Show       from './components/Crud/show';
-
-import Task       from './task';
-import Header     from './header';
-import { Switch } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
-
+import FormCreateDialog from './form-create-dialog';
+import FormShowDialog from './form-show-dialog';
 interface ITask{
     date       : Date;
     discription: string;
     state      : boolean;
 }
-
-const crudModais = {
-    edit  : <h1>edit</h1>,
-    create: <h1>create</h1>,
-    show  : <h1>show</h1>,
+interface IModalState{
+    open: boolean;
+    data: any;
+    current: string;
 }
+
+interface IProps{
+    handleClose: ()=> void;
+    data: any;
+}
+interface IModalDictinary{
+    // [key:string]:React.ReactElement;
+    [key:string]: React.FC<IProps>;
+}
+const columns  = [
+    {field: 'id'         , headerName: 'ID'      ,  width: 90},
+    {field: 'description', headerName: 'DESCRIÇÃO', width: 150 }
+];
 
 export default function TaskManagement(){
 
     const [tasks, setTasks] = useState<ITask[]>([]);
+    const [modalState, setModalState] = useState<IModalState>({
+        open:false, data:{}, current: '',
+    });
 
-    const getModalComponent:React.FC = () => {
-        const Component = crudModais['edit'];
-        return Component
+    const openModal = (modo:string, data:any) => {
+        setModalState({open:true, data:data, current: modo});
     }
-
+    const closeModal = () => {
+        const current = modalState.current
+        setModalState({open:false, current: current, data: []});
+        // setModal(modo, [], false)     
+    }
+    const Crud: IModalDictinary = {
+        'create': FormCreateDialog,
+        'show'  : FormShowDialog,
+    }
+    const SwitchDialog = function({modo, handleClose}:any){
+        return Crud[modo]({handleClose:handleClose, data:[]})
+    }
+    
     useEffect(()=>{
         api.get<ITask[]>('/task').then( response  => {
             setTasks(response.data);
         })
     }, []);
 
-    // const modal = { render: (state:any) => {
-    //     const renders: object = {};
-    //     <Modal show={state.show}>
-    //         {renders[state.name]}
-    //     </Modal>
-    // }}
-
     return (
-        <div className="container">
+        <div className="container" style={{height:'calc(100% - 100px)'}}>
             <Title>My task list</Title>
-            <ToolBar openCreateModal={()=> alert('ola')}/>
-            <Header columns={{
-                date       : "Data",
-                discription: "descrição",
-                state      : 'visto'
-            }}/>
-            {tasks.map( task =>
-                <Task task={task} /> )}  
-            <Modal>
-                {}
-            </Modal>
+            <ToolBar openCreateModal={()=> openModal('create', [])}/>
+            <DataGrid
+                columns ={columns}
+                rows    ={tasks}
+                pageSize={5}
+                onRowClick={(props, e)=>{openModal('show', props.row)}} />
+            <Dialog open={modalState.open}>
+                <SwitchDialog handleClose={closeModal} modo={modalState.current}/>
+            </Dialog>
+            {/* <FormCreateDialog
+                open={modalState['create'].open}
+                handleClose={()=> closeModal('create')} />
+            <FormShowDialog
+                open={modalState['show'].open}
+                handleClose={()=> closeModal('show')}
+                data={modalState['show'].data}/> */}
+            {/* <FormEditDialog /> */}
+
         </div>
     )
 }
