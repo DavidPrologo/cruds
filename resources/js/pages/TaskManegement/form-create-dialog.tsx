@@ -10,6 +10,7 @@ import DialogTitle       from '@material-ui/core/DialogTitle';
 
 import api from '../../services/api';
 import { SentimentSatisfiedAlt } from '@material-ui/icons';
+import { gridColumnsTotalWidthSelector } from '@material-ui/data-grid';
 
 interface IProps {
     handleClose: () => void;
@@ -17,54 +18,78 @@ interface IProps {
 }
 
 interface IData {
-  [nome:string]: string;
+  title      : string;
+  description: string;
+  date       : Date;
+  checked?   :boolean;
 }
 
 interface IField {
-  name : string;
-  value: string;
+  name : keyof IData;
+  value: IData[keyof IData];
 }
-
+function setObject<Type, Key extends keyof Type>
+(object:Type, key:Key, value:Type[Key]): void{
+  object[key] = value;
+}
 export default function FormCreateDialog({ handleClose}:IProps) {
-    const [data, setData] = React.useState<IData>({});
-    const setField = ({name, value}:IField) => {
-      data[name] = value
+    const [data, setData] = React.useState<IData>({} as IData);
+    const setField = (key:any, value:any) => {
+      setObject<IData, keyof IData>(data, key, value);
       setData(data);
     }
 
-    const handleSubmit = ():void => {
-      api.post('task', {data: data})
-      .then((resp) => {console.log(resp)})
+    function handleCadastrar ():void {
+      api.post('task', data)
+      .then ((resp)  => {
+        alert(resp);
+        handleClose();
+      })
       .catch((error) => { console.log(error)})
     }
     return (
       <div>
-        {/* <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title"> */}
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Cadastrar</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              {data.nome}To subscribe to this website, please enter your email address here. We will send updates
-              occasionally.
-            </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
-              id="name"
-              label="Email Address"
-              type="email"
+              label ="Title"
+              type  ="text"
+              name  = "title"
               fullWidth
-              onChange={e => setField(e.target as IField)}
+              onChange={e => setField(e.target.name, e.target.value)}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              label ="Description"
+              type  ="text"
+              name  = "description"
+              fullWidth
+              onChange={e => setField(e.target.name, e.target.value)}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              label ="Date"
+              type="date"
+              name  = "date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              fullWidth
+              onChange={e => setField(e.target.name, e.target.value)}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color="primary">
-              Subscribe
+            <Button onClick={handleCadastrar} color="primary">
+              Cadastrar
             </Button>
           </DialogActions>
-        {/* </Dialog> */}
       </div>
     );
   }

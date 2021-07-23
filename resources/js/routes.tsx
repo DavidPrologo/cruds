@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from 'react-router-dom';
 
-import Home from './Home';
+import Home     from './pages/Home';
 import TaskPage from './pages/TaskManegement/index';
-import About from './About';
+import About    from './pages/About';
 
 export default function Routes() {
     return(

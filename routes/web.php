@@ -21,8 +21,10 @@ Route::get('/web/{any?}', function () {
 // ->where('any','.*');
 // ->where('any','^((?|api).)*$')
 ;
-Route::group(['prefix'=> 'api'], function(){
-    Route::get('/task', [\App\Http\Controllers\Api\TaskController::class, 'index']);
-});
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::group(['prefix'=> 'api', 'namespace' => 'App\\Http\\Controllers\\Api'], function(){
+//     Route::get   ('/task'        , 'TaskController@show');
+//     Route::post  ('/task'       , 'TaskController@store');
+//     Route::get   ('/task/{id}'   , 'TaskController@show');
+//     Route::put   ('/task/{id}'    , 'TaskController@store');
+//     Route::delete('/task/{id}', 'TaskController@destroy');
+// });

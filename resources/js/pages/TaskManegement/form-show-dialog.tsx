@@ -21,7 +21,7 @@ export default function FormShowDialog({handleClose, data}:IProps){
                 Cancel
                 </Button>
                 <Button onClick={handleSubmit} color="primary">
-                Subscribe
+                    Editar
                 </Button>
             </DialogActions>
         </div>
