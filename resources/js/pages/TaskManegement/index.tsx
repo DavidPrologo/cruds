@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 import { DataGrid } from '@material-ui/data-grid';
-import _ from 'lodash/fp';
+// import _ from 'lodash/fp';
 
 
 import api        from '../../services/api';
@@ -12,6 +12,7 @@ import SwitchModal      from './switch-modal';
 import FormCreateDialog from './form-create-dialog';
 import FormShowDialog   from './form-show-dialog';
 import FormEditDialog   from './form-edit-dialog';
+import setObjectField from '../../services/models';
 interface ITask{
     date       : Date;
     discription: string;
@@ -36,10 +37,6 @@ const columns  = [
     {field: 'title'      , headerName: 'TITLE'    , width: 150},
     {field: 'description', headerName: 'DESCRIÇÃO', width: 150}
 ];
-const Crud: IModalDictinary = {
-    'create': FormCreateDialog,
-    'show'  : FormShowDialog,
-}
 function applyFilter<Type, Key extends keyof Type>(query: string, column: Key, data: Type[]){
     console.log(data)
     return data.filter(
@@ -50,12 +47,23 @@ function applyFilter<Type, Key extends keyof Type>(query: string, column: Key, d
 export default function TaskManagement(){
 
     const [tasks, setTasks] = useState<ITask[]>([]);
-    const [query, setQuery] = useState<string>('');
-    const [column, setColumn] = useState<string>('title');
+    const [filteredTasks, setFilteredTasks] = useState<ITask[]>([]);
+    const [filterState, setFilterState] = useState({column:'title', query:''})
     const [modalState, setModalState] = useState<IModalState>({
         open:false, data:{}, modo: '',
     });
-
+    function setFilter(key:string, value:string) {
+        // const {name, value} = e.target;
+        setObjectField<Object, keyof Object>(filterState, key as keyof Object, value);
+        filterTasks(tasks);
+    }
+    function filterTasks(tasks:ITask[]){
+        setFilteredTasks( applyFilter<ITask, keyof ITask>(
+            filterState.query,
+            filterState.column as keyof ITask,
+            tasks)
+        )
+    }
     const openModal = (modo:string, data:any) => {
         setModalState({open:true, data:data, modo: modo});
     }
@@ -64,28 +72,27 @@ export default function TaskManagement(){
     }    
     useEffect(()=>{
         api.get<ITask[]>('/task').then( response  => {
-            setTasks(
-                applyFilter<ITask, keyof ITask>(
-                    query,
-                    column as keyof ITask,
-                    response.data
-                )
-            )
+            setTasks(response.data)
+            filterTasks(response.data)
         })
-    }, [modalState.open, query]);
+    }, [modalState.open]);
 
     return (
         <div className="container" style={{height:'calc(100% - 100px)'}}>
             <Title>My task list</Title>
-            <select onChange={e => setColumn(e.target.value)}>
+            {/* <select name="column" onChange={ e => setFilter('column',e.target.value) }>
                 <option value='title'>title</option>
                 <option value='description'>description</option>
-            </select>
-            <input onChange={e => setQuery(e.target.value)}/>
-            <ToolBar openCreateModal={()=> openModal('create', [])}/>
+            </select> */}
+            {/* <input name="query" onChange={ setFilter }/> */}
+            <ToolBar
+              selectHandle     = { e => setFilter('column', e.target.value)}
+              searchInputHandle= { e => setFilter('query', e.target.value)}
+              btnAddHandle     = {()=> openModal('create', [])}
+              />
             <DataGrid
                 columns ={columns}
-                rows    ={tasks}
+                rows    ={filteredTasks}
                 pageSize={5}
                 onRowClick={(props, e)=>{openModal('show', props.row)}} />
             <SwitchModal

@@ -2,15 +2,12 @@ import React from 'react';
 
 import Button            from '@material-ui/core/Button';
 import TextField         from '@material-ui/core/TextField';
-import Dialog            from '@material-ui/core/Dialog';
 import DialogActions     from '@material-ui/core/DialogActions';
 import DialogContent     from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle       from '@material-ui/core/DialogTitle';
 
-import api from '../../services/api';
-import { SentimentSatisfiedAlt } from '@material-ui/icons';
-import { gridColumnsTotalWidthSelector } from '@material-ui/data-grid';
+import api   from '../../services/api';
+import setObjectField from '../../services/models';
 
 interface IProps {
     handleClose: () => void;
@@ -18,8 +15,8 @@ interface IProps {
 }
 
 interface IData {
-  title      : string;
-  description: string;
+  title      : number;
+  description: number;
   date       : Date;
   checked?   :boolean;
 }
@@ -28,14 +25,13 @@ interface IField {
   name : keyof IData;
   value: IData[keyof IData];
 }
-function setObject<Type, Key extends keyof Type>
-(object:Type, key:Key, value:Type[Key]): void{
-  object[key] = value;
-}
+
 export default function FormCreateDialog({ handleClose}:IProps) {
     const [data, setData] = React.useState<IData>({} as IData);
-    const setField = (key:any, value:any) => {
-      setObject<IData, keyof IData>(data, key, value);
+
+    function setField(e: React.ChangeEvent<HTMLInputElement> ) {
+      const {name, value} = e.target;
+      setObjectField<IData, keyof IData>(data, name as keyof IData, value);
       setData(data);
     }
 
@@ -58,7 +54,7 @@ export default function FormCreateDialog({ handleClose}:IProps) {
               type  ="text"
               name  = "title"
               fullWidth
-              onChange={e => setField(e.target.name, e.target.value)}
+              onChange={ setField }
             />
             <TextField
               autoFocus
@@ -67,7 +63,7 @@ export default function FormCreateDialog({ handleClose}:IProps) {
               type  ="text"
               name  = "description"
               fullWidth
-              onChange={e => setField(e.target.name, e.target.value)}
+              onChange={ setField }
             />
             <TextField
               autoFocus
@@ -79,7 +75,7 @@ export default function FormCreateDialog({ handleClose}:IProps) {
                 shrink: true,
               }}
               fullWidth
-              onChange={e => setField(e.target.name, e.target.value)}
+              onChange={ setField }
             />
           </DialogContent>
           <DialogActions>
