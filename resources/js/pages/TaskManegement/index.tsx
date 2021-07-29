@@ -8,7 +8,7 @@ import api        from '../../services/api';
 import ToolBar    from './components/tool-bar';
 import Title      from './components/title';
 
-import SwitchModal      from './switch-modal';
+import SwitchModal      from './components/switch-modal';
 import FormCreateDialog from './form-create-dialog';
 import FormShowDialog   from './form-show-dialog';
 import FormEditDialog   from './form-edit-dialog';
@@ -28,9 +28,6 @@ interface IProps{
     handleClose: ()=> void;
     data: any;
 }
-interface IModalDictinary{
-    [key:string]: React.FC<IProps>;
-}
 const columns  = [
     {field: 'id'         , headerName: 'ID'       , width: 90 },
     {field: 'checked'    , headerName: 'CHECKED'  , width: 90 },
@@ -45,15 +42,14 @@ function applyFilter<Type, Key extends keyof Type>(query: string, column: Key, d
     )
 }
 export default function TaskManagement(){
-
-    const [tasks, setTasks] = useState<ITask[]>([]);
+    const defaultColumnValue                = 'title'
+    const [tasks, setTasks]                 = useState<ITask[]>([]);
     const [filteredTasks, setFilteredTasks] = useState<ITask[]>([]);
-    const [filterState, setFilterState] = useState({column:'title', query:''})
-    const [modalState, setModalState] = useState<IModalState>({
+    const [filterState, setFilterState]     = useState({column:defaultColumnValue, query:''})
+    const [modalState, setModalState]       = useState<IModalState>({
         open:false, data:{}, modo: '',
     });
     function setFilter(key:string, value:string) {
-        // const {name, value} = e.target;
         setObjectField<Object, keyof Object>(filterState, key as keyof Object, value);
         filterTasks(tasks);
     }
@@ -80,12 +76,11 @@ export default function TaskManagement(){
     return (
         <div className="container" style={{height:'calc(100% - 100px)'}}>
             <Title>My task list</Title>
-            {/* <select name="column" onChange={ e => setFilter('column',e.target.value) }>
-                <option value='title'>title</option>
-                <option value='description'>description</option>
-            </select> */}
-            {/* <input name="query" onChange={ setFilter }/> */}
             <ToolBar
+              filterColumns   = {[
+                {value: 'title'       , label:'Title'},
+                {value: 'description' , label:'Description'}
+              ]}
               selectHandle     = { e => setFilter('column', e.target.value)}
               searchInputHandle= { e => setFilter('query', e.target.value)}
               btnAddHandle     = {()=> openModal('create', [])}
@@ -96,8 +91,10 @@ export default function TaskManagement(){
                 pageSize={5}
                 onRowClick={(props, e)=>{openModal('show', props.row)}} />
             <SwitchModal
+              aria-labelledby="customized-dialog-title"
               open       ={modalState.open}
-              handleClose={closeModal} 
+              handleOpen ={openModal}
+              handleClose={closeModal}
               modo       ={modalState.modo}
               data       ={modalState.data} 
               modais     ={{

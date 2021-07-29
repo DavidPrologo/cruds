@@ -6,8 +6,8 @@ import DialogActions     from '@material-ui/core/DialogActions';
 import DialogContent     from '@material-ui/core/DialogContent';
 import DialogTitle       from '@material-ui/core/DialogTitle';
 
-import api   from '../../services/api';
-import setObjectField from '../../services/models';
+import api               from '../../services/api';
+import setObjectField    from '../../services/models';
 
 interface IProps {
     handleClose: () => void;
